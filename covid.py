@@ -1,3 +1,4 @@
+from typing import final
 import numpy as np
 
 ALL=[3979839.0,
@@ -804,7 +805,10 @@ UKD=[6856933.0,
 9495395.0]
 
 lastTenDay = FRA[-10:]
-first10DayALL = ALL[:10]
+
+TAB = [ALL, ISR, ITA, CHI, ESP, UKD, TUR, SUE, RUS, NOR]
+
+finalTab = TAB.copy()
 
 def corelation_covid(country, country2):
     lenCountry = len(country) + 1
@@ -813,7 +817,6 @@ def corelation_covid(country, country2):
         country.pop(0)
         country2.append(matrix.min())
 
-TAB = [ALL, ISR, ITA, CHI, ESP, UKD, TUR, SUE, RUS, NOR]
 
 ALL2 = []
 ISR2 = []
@@ -826,8 +829,23 @@ SUE2 = []
 RUS2 = []
 NOR2 = []
 
+ALLCOPY = ALL.copy()
+ISRCOPY = ISR.copy()
+ITACOPY = ITA.copy()
+CHICOPY= CHI.copy()
+ESPCOPY = ESP.copy()
+UKDCOPY = UKD.copy()
+TURCOPY = TUR.copy()
+SUECOPY = SUE.copy()
+RUSCOPY = RUS.copy()
+NORCOPY = NOR.copy()
+
 TAB2 = [ALL2, ISR2, ITA2, CHI2, ESP2, UKD2, TUR2, SUE2, RUS2, NOR2]
 
+# dictionnaireCountry= {'ALL': ALL2, 'ISR' : ISR2, 'ITA' : ITA2, 'CHI' : CHI2, 'ESP': ESP2,'UKD': UKD2, 'TUR':TUR2, 'SUE':SUE2,'RUS': RUS2, 'NOR':NOR2}
+# listDico = dictionnaireCountry
+
+ITAtest = ITA.copy()
 bestCoreForEveryCountry = []
 
 for i in range(len(TAB)):
@@ -835,5 +853,35 @@ for i in range(len(TAB)):
 
 for countries in TAB2:
     bestCoreForEveryCountry.append(max(countries))
+    
+best = max(bestCoreForEveryCountry)
+indiceCountryBestCore = bestCoreForEveryCountry.index(best)
 
-print(bestCoreForEveryCountry)
+#Affiche l'index de la meilleur corelation
+print("meilleur score", best)
+
+#Meilleur corelation avec les Italiens
+indexCountryValue = TAB2[indiceCountryBestCore].index(best)
+print(indexCountryValue)
+
+future10Days = []
+
+
+for nbDeath in ITACOPY[indexCountryValue + 9 :indexCountryValue + 19]:
+    future10Days.append(nbDeath)
+    
+print(future10Days)
+
+# [0,1,2,3,4,5,6,7,8]
+
+# #nbValeur, nbPanelJour, nbPaquet, nbIndice
+# #Formule == nbIndice - 1 jusque +nbPanelJour
+# 9%1 = 9
+# 9%2 = 8
+# 9%3 = 7 == 2
+# 9%4 = 6
+# 9%5 = 5 == 3
+# 9%6 = 4
+# 9%7 = 3
+# 9%8 = 2
+# 9%9 = 1

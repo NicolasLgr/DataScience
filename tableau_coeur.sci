@@ -413,7 +413,6 @@ TAB=[ATSI MEVLUT PAULINE QUENTIN ANTONI]
 [n,m]=size(TAB)
 
 //CALCUL DES COEF DE CORELATION
-
 for i=1:m
     for j= 1:m
         CORE(i,j)=correl(TAB(:,i), TAB(:,j))
