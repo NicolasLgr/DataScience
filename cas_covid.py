@@ -1,4 +1,3 @@
-from typing import final
 import numpy as np
 
 ALL=[3979839.0,
@@ -804,71 +803,77 @@ UKD=[6856933.0,
 9451884.0,
 9495395.0]
 
+#teste toutes les corelations avec un pas de 1
+def corelation_covid(country, country2):
+    lenCountry = len(country) + 1
+    copy = country.copy()
+    for i in range(lenCountry - 10):
+        matrix = np.corrcoef(lastTenDay, copy[:10])
+        copy.pop(0)
+        country2.append(matrix.min())
+
+#récupere les 10 derniers cas de la France
 lastTenDay = FRA[-10:]
 
 TAB = [ALL, ISR, ITA, CHI, ESP, UKD, TUR, SUE, RUS, NOR]
 
-finalTab = TAB.copy()
+# Tableau qui va stocker toutes les corelations en fonction des pays
+ALL_core = []
+ISR_core = []
+ITA_core = []
+CHI_core = []
+ESP_core = []
+UKR_core = []
+TUR_core = []
+SUE_core = []
+RUS_core = []
+NOR_core = []
 
-def corelation_covid(country, country2):
-    lenCountry = len(country) + 1
-    for i in range(lenCountry - 10):
-        matrix = np.corrcoef(lastTenDay, country[:10])
-        country.pop(0)
-        country2.append(matrix.min())
 
+TAB_core = [ALL_core, ISR_core, ITA_core, CHI_core, ESP_core, UKR_core, TUR_core, SUE_core, RUS_core, NOR_core]
+LEGENDE = ["ALL", "ISR", "ITA", "CHI", "ESP", "UKR", "TUR", "SUE", "RUS", "NOR"]
 
-ALL2 = []
-ISR2 = []
-ITA2 = []
-CHI2 = []
-ESP2 = []
-UKD2 = []
-TUR2 = []
-SUE2 = []
-RUS2 = []
-NOR2 = []
-
-ALLCOPY = ALL.copy()
-ISRCOPY = ISR.copy()
-ITACOPY = ITA.copy()
-CHICOPY= CHI.copy()
-ESPCOPY = ESP.copy()
-UKDCOPY = UKD.copy()
-TURCOPY = TUR.copy()
-SUECOPY = SUE.copy()
-RUSCOPY = RUS.copy()
-NORCOPY = NOR.copy()
-
-TAB2 = [ALL2, ISR2, ITA2, CHI2, ESP2, UKD2, TUR2, SUE2, RUS2, NOR2]
-
-# dictionnaireCountry= {'ALL': ALL2, 'ISR' : ISR2, 'ITA' : ITA2, 'CHI' : CHI2, 'ESP': ESP2,'UKD': UKD2, 'TUR':TUR2, 'SUE':SUE2,'RUS': RUS2, 'NOR':NOR2}
-# listDico = dictionnaireCountry
-
-ITAtest = ITA.copy()
+# Rassemble les meilleurs corelation de chaque pays
 bestCoreForEveryCountry = []
 
+# Boucle qui parcours tous les pays pour tester les corelations
 for i in range(len(TAB)):
-    corelation_covid(TAB[i], TAB2[i])
+    corelation_covid(TAB[i], TAB_core[i])
 
-for countries in TAB2:
+# Ajoute la meilleure corelation a la liste
+for countries in TAB_core:
     bestCoreForEveryCountry.append(max(countries))
-    
+
+# La meilleure corelation
 best = max(bestCoreForEveryCountry)
+
+# Indice pour retrouver à quel pays appartient la meilleure corelation
 indiceCountryBestCore = bestCoreForEveryCountry.index(best)
 
-#Affiche l'index de la meilleur corelation
-print("meilleur score", best)
+# Le pays avec la meilleure corelation
+countryCore = TAB[indiceCountryBestCore]
 
-#Meilleur corelation avec les Italiens
-indexCountryValue = TAB2[indiceCountryBestCore].index(best)
-print(indexCountryValue)
+#Affiche l'index de la meilleur corelation (ITALIE)
+print("meilleur score", best," avec ",LEGENDE[indiceCountryBestCore])
 
+#Intervalle de la meilleure corelation (41)
+indexCountryValue = TAB_core[indiceCountryBestCore].index(best)
+
+
+actualDay = []
 future10Days = []
 
+# Classe dans le tableau les 10 jours après la corelation du pays trouvé 
+for nbDeathBefore in countryCore[indexCountryValue - 1 :indexCountryValue + 9]:
+    actualDay.append(nbDeathBefore)
 
-for nbDeath in ITACOPY[indexCountryValue + 9 :indexCountryValue + 19]:
-    future10Days.append(nbDeath)
-    
-print(future10Days)
+# Classe dans le tableau les jours qui sont corelé avec les 10 derniers jours de notre pays
+for nbDeathAfter in countryCore[indexCountryValue + 9 :indexCountryValue + 19]:
+    future10Days.append(nbDeathAfter)
+
+tabPolyfit = np.polyfit(actualDay, lastTenDay,2)
+tabPolyval = np.polyval(tabPolyfit, future10Days)
+
+# Affiche les prévisions des 10 prochains jours du pays
+print(tabPolyval)
 
