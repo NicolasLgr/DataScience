@@ -867,10 +867,10 @@ print(indexCountryValue)
 future10Days = []
 
 
-for nbDeath in ITACOPY[indexCountryValue + 9 :indexCountryValue + 19]:
+for nbDeath in ITACOPY[indexCountryValue - 1 :indexCountryValue + 9]:
     future10Days.append(nbDeath)
     
-print(future10Days)
+print(indexCountryValue)
 
 # [0,1,2,3,4,5,6,7,8]
 
