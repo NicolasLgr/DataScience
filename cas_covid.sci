@@ -835,6 +835,3 @@ for i=1:m
         CORE(i,j)=correl(TAB(:,i), TAB(:,j))
     end
 end
-
-
-//10 derniers jour de la FRA
