@@ -84,9 +84,7 @@ M = cat(dims, M11', M12', M21', M22')
 
 //Question 12 : générer la matrice centré réduite x à partir de M
 
-
 //n ligne et m colonne
-
 [n,m] = size(M)
 x = []
 for i = 1:m
@@ -96,3 +94,15 @@ for i = 1:m
         x(j,i) = (M(j,i) - moyenne_colonne)/ecart_type_colonne
     end
 end
+
+//Question 13 : Matrice de corelation COR
+for i=1:m
+    for j= 1:m
+        COR(i,j)=correl(M(:,i), M(:,j))
+    end
+end
+
+//Question 14 : les 10 meilleurs corelation
+
+[tableau_sort, indice_test] = gsort(COR)
+
